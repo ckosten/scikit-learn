@@ -2,7 +2,6 @@
 import itertools
 import math
 from functools import wraps
-
 import numpy
 import scipy.special as special
 
@@ -444,6 +443,9 @@ def _add_to_diagonal(array, value, xp):
         for i in range(array.shape[0]):
             array[i, i] += value
 
+def _weighted_average(nums, weights):
+    """Compute the weighted average without using numpy.average."""
+    return sum(x * y for x, y in zip(nums, weights)) / sum(weights)
 
 def _weighted_sum(sample_score, sample_weight, normalize=False, xp=None):
     # XXX: this function accepts Array API input but returns a Python scalar
@@ -460,7 +462,7 @@ def _weighted_sum(sample_score, sample_weight, normalize=False, xp=None):
             sample_weight_np = numpy.asarray(sample_weight)
         else:
             sample_weight_np = None
-        return float(numpy.average(sample_score_np, weights=sample_weight_np))
+        return float(_weighted_average(sample_score_np, weights=sample_weight_np))
 
     if not xp.isdtype(sample_score.dtype, "real floating"):
         # We move to cpu device ahead of time since certain devices may not support
