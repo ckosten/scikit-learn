@@ -444,6 +444,7 @@ def _add_to_diagonal(array, value, xp):
             array[i, i] += value
 
 def _weighted_average(nums, weights):
+    """Compute the weighted average without using numpy.average."""
     return sum(x * y for x, y in zip(nums, weights)) / sum(weights)
 
 def _weighted_sum(sample_score, sample_weight, normalize=False, xp=None):
